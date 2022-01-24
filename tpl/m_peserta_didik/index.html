@@ -1,0 +1,249 @@
+<div ng-controller="peserta_didikCtrl">
+    <div class="">
+        <div class="panel panel-default">
+            <div class="wrapper-sm" ng-show="!is_edit">
+                <div class="card" st-pipe="callServer" st-table="displayed">
+                    <div class="card-header">
+                        <strong class="d-md-down-none">
+                            Daftar Peserta Didik
+                        </strong>
+                        <div class="btn-group pull-right mt-5px" role="group">
+                            <button class="btn btn-secondary btn-sm" ng-click="isCollapsed = !isCollapsed"
+                                    ng-init="isCollapsed = true">
+                                <i class="fa fa-search">
+                                </i>
+                                Pencarian
+                            </button>
+                            <button class="btn btn-primary btn-sm" ng-click="create();">
+                                <i class="fa fa-plus">
+                                </i>
+                                Buat Baru
+                            </button>
+                        </div>
+                    </div>
+                    <div class="pl-15px pr-15px">
+                        <div class="row mt-15px" ng-show="!isCollapsed">
+                            <div class="col-md-12">
+                                <div class="alert alert-secondary">
+                                    <form name="landaform" novalidate="">
+                                        <div class="form-group row mb-0">
+                                            <label class="col-sm-1 col-form-label-sm mb-0">Nama Sekolah</label>
+                                            <div class="col-sm-2">
+                                                <input st-search="nama_sekolah" class="form-control form-control-sm" placeholder="Cari berdasarkan nama"/>
+                                            </div>
+                                            <!-- <label class="col-sm-1 col-form-label-sm mb-0">Username</label>
+                                            <div class="col-sm-2">
+                                                <input st-search="username" class="form-control form-control-sm" placeholder="Cari berdasarkan username"/>
+                                            </div> -->
+                                            <label class="col-sm-1 col-form-label-sm mb-0">Status</label>
+                                            <div class="col-sm-2">
+                                                <select class="form-control form-control-sm" st-search="is_deleted">
+                                                    <option value="0">Aktif</option>
+                                                    <option value="1">Terhapus</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="row pencarian" ng-show="!isCollapsed">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-3 control-label">
+                                    Pertanyaan
+                                </label> -->
+                                <!-- <div class="col-sm-9">
+                                    <input class="form-control form-control-sm" st-search="pertanyaan"/>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-3 control-label">
+                                    Type Jawaban
+                                </label>
+                                <div class="col-sm-9">
+                                    <select class="form-control form-control-sm" st-search="type_jawaban">
+                                        <option value="">Semua</option>
+                                        <option value="pilihan">Pilihan</option>
+                                        <option value="isian">Isian</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="card-body p-0px">
+                        <div class="table-responsive">
+                            <table class="table  table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="align-left">No</th>
+                                <!-- <th class="align-left">NPSN</th> -->
+                                <th class="align-left">Nama Sekolah</th>
+                                <th class="align-left">Alamat</th>
+                                <th></th>
+                                    <!-- <th st-sort="feedback.pertanyaan" style="text-align: left;">Pertanyaan</th>
+                                    <th st-sort="feedback.type_jawaban" style="text-align: left;">Type Jawaban</th>
+                                    <th></th> -->
+                                </tr>
+                                </thead>
+                                <tbody ng-show="!isLoading">
+                                <tr ng-repeat="row in displayed" ng-dblclick="view(row)">
+                                    <td class="align-left">{{ $rowIndex = $index + 1 }}.</td>
+                                <!-- <td class="align-left">{{ row.npsn }}</td> -->
+                                <td class="align-left">{{ row.nama_sekolah }}</td>
+                                <td class="align-left">{{ row.alamat }}</td>
+                                    <!-- <td>{{row.pertanyaan}}</td>
+                                    <td>{{row.type_jawaban}}</td> -->
+                                    <td>
+                                        <div class="btn-group pull-right" role="group" style="margin-top: -3px;">
+                                            <button type="button" class="btn btn-info btn-table fa fa-edit"
+                                                    ng-click="update(row)"></button>
+                                            <button type="button" class="btn btn-danger btn-table fa fa-trash"
+                                                    ng-click="delete(row);"></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tbody ng-show="isLoading">
+                                <tr>
+                                    <td colspan="6" class="text-center">Loading ...</td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="6" class="text-center" st-pagination="" st-items-by-page="10"
+                                        st-template="tpl/common/pagination.custom.html">
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--FORM-->
+
+            <div class="card" ng-show="is_edit">
+                <div class="card-header">
+                    <strong>
+                        {{formtitle}}
+                    </strong>
+                </div>
+                <div class="card-body">
+                    <form name="landaform" class="form-horizontal form-validation " novalidate="">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-4 col-form-label-sm required">Nama Sekolah</label>
+                                    <div class="col-sm-8">
+                                        <!-- <input type="text" class="form-control form-control-sm" ng-model="form.nama_sekolah" ng-disabled="is_view" required/> -->
+                                        <ui-select ng-model="form.id_sekolah" class="w100" theme="bootstrap" ng-disabled="is_view" on-select="getKode(form.id_sekolah)">
+                                            <ui-select-match placeholder="Pilih Sekolah">{{ $select.selected.nama_sekolah }}</ui-select-match>
+                                            <ui-select-choices position="down" repeat="item in listSekolah | filter :$select.search">
+                                                {{ item.nama_sekolah }}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-4 col-form-label-sm required">Alamat Sekolah</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control form-control-sm" ng-model="form.alamat" ng-disabled="true" required/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label style="margin-top: 20px;"
+                                           class="col-sm-3 col-form-label-sm">Daftar Siswa</label>
+                                </div>
+                                <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <td ng-hide="is_view" style="padding: 0px; width: 40px;" class="text-center">
+                                                    <button class="btn btn-success" ng-click="addDetail()"
+                                                            ng-disabled="is_view">
+                                                        <i class="fa fa-plus">
+                                                        </i>
+                                                    </button>
+                                                </td>
+                                                <th style="text-align: center; font-weight: bold;">
+                                                    Kelas
+                                                </th>
+                                                <th style="text-align: center; font-weight: bold;">
+                                                    Jumlah Perempuan
+                                                </th>
+                                                <th style="text-align: center; font-weight: bold;">
+                                                    Jumlah Laki-laki
+                                                </th>
+                                                <th style="text-align: center; font-weight: bold;">
+                                                    Total
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="detail in detJawab">
+                                                <td ng-hide="is_view" style="padding: 0px;" class="text-center">
+                                                    <button class="btn btn-danger"
+                                                            ng-click="removeRow($index, detail.id)"
+                                                            ng-disabled="is_view">
+                                                        <i class="fa fa-trash">
+                                                        </i>
+                                                    </button>
+                                                </td>
+                                                <td>
+                                                    <input class="form-control form-control-sm" ng-disabled="is_view"
+                                                           ng-model="detail.kelas" style="margin: 0px auto"
+                                                           type="text">
+
+                                                </td>
+                                                <td>
+                                                    <input class="form-control form-control-sm" ng-disabled="is_view"
+                                                           ng-model="detail.perempuan" ng-change="hitungTotal()"style="margin: 0px auto"
+                                                           type="number">
+
+                                                </td>
+                                                <td>
+                                                    <input class="form-control form-control-sm" ng-disabled="is_view"
+                                                           ng-model="detail.laki" ng-change="hitungTotal()"style="margin: 0px auto"
+                                                           type="number">
+
+                                                </td>
+                                                <td>
+                                                    <input class="form-control form-control-sm" ng-disabled="1"
+                                                           ng-model="detail.total" style="margin: 0px auto"
+                                                           type="number">
+
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <div class="pull-right">
+                        <button class="btn btn-secondary btn-sm" ng-click="cancel()" type="submit">
+                            <i class="fa fa-arrow-left">
+                            </i>
+                            Kembali
+                        </button>
+                        <button button-spinner="loading" class="btn btn-primary btn-sm" ng-click="save(form, detJawab)"
+                                ng-disabled="loading" ng-hide="is_view" type="submit">
+                            <i class="fa fa-save">
+                            </i>
+                            Simpan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

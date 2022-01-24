@@ -1,0 +1,78 @@
+<div class="sidebar">
+    <nav class="sidebar-nav">
+        <ul class="nav">
+            <li class="nav-title">Menu</li>
+            <li class="nav-item">
+                <a class="nav-link" ui-sref-active="active" ui-sref="app.main">
+                    <i class="icon-speedometer"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li class="nav-title" ng-if="user.m_roles_id != 4">Pengaturan</li>
+            <li class="nav-item nav-dropdown" ng-class="{open: $state.includes('pengguna')}" ng-if="user.akses.pengguna_akses || user.akses.pengguna_user || user.akses.pengguna_barang">
+                <a class="nav-link nav-dropdown-toggle" ng-class="{active: $state.includes('pengguna')}" href="#">
+                    <i class="fa fa-user-o"></i>
+                    User Login
+                </a>
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item" ng-if="user.akses.pengguna_akses">
+                        <a class="nav-link" ui-sref-active="active" ui-sref="pengguna.akses">
+                            <i class="icon-cursor"></i>
+                            Hak Akses
+                        </a>
+                    </li>
+                    <li class="nav-item" ng-if="user.akses.pengguna_user">
+                        <a class="nav-link" ui-sref-active="active" ui-sref="pengguna.user">
+                            <i class="icon-cursor"></i>
+                            Pengguna
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item nav-dropdown">
+                <a class="nav-link" ui-sref-active="active" ui-sref="app.sekolah">
+                    <i class="fa fa-user-o"></i>
+                    Sekolah
+                </a>
+            </li>
+            <li class="nav-item nav-dropdown">
+                <a class="nav-link" ui-sref-active="active" ui-sref="app.ptk">
+                    <i class="fa fa-user-o"></i>
+                    PTK
+                </a>
+            </li>
+            <li class="nav-item nav-dropdown">
+                <a class="nav-link" ui-sref-active="active" ui-sref="app.peserta_didik">
+                    <i class="fa fa-user-o"></i>
+                    Peserta Didik
+                </a>
+            </li>
+            <li class="nav-item nav-dropdown" ng-class="{open: $state.includes('master')}" ng-if="user.akses.master_tb || user.akses.master_ruang">
+                <a class="nav-link nav-dropdown-toggle" ng-class="{active: $state.includes('master')}" href="#">
+                    <i class="fa fa-user-o"></i>
+                    Sarpras
+                </a>
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item" ng-if="user.akses.master_tb">
+                        <a class="nav-link" ui-sref-active="active" ui-sref="master.tb">
+                            <i class="icon-cursor"></i>
+                            Tanah dan Bangunan
+                        </a>
+                    </li>
+                    <li class="nav-item" ng-if="user.akses.master_ruang">
+                        <a class="nav-link" ui-sref-active="active" ui-sref="master.ruang">
+                            <i class="icon-cursor"></i>
+                            Ruang
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item nav-dropdown" ng-if="user.akses.app_laporan">
+                <a class="nav-link" ui-sref-active="active" ui-sref="app.laporan">
+                    <i class="fa fa-user-o"></i>
+                    Laporan Sekolah
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

@@ -1,0 +1,6 @@
+vendor/
+api/vendor/
+api/sessions/
+api/userlog
+api/config
+api/config/
